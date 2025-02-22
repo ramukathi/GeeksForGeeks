@@ -90,43 +90,33 @@ class GFG {
 
 class Solution {
     public static ArrayList<ArrayList<Integer>> getPairs(int[] arr) {
-        // Sort the array first (O(n log n))
+        // code here
         Arrays.sort(arr);
+        ArrayList<ArrayList<Integer>> ans =new ArrayList<>();
         
-        // Use a TreeMap to store frequencies so that keys are sorted
-        TreeMap<Integer, Integer> freq = new TreeMap<>();
-        for (int num : arr) {
-            freq.put(num, freq.getOrDefault(num, 0) + 1);
-        }
+        int i=0, j=arr.length-1;
         
-        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
-        
-        // Iterate through the sorted keys of the frequency map
-        for (int num : freq.keySet()) {
-            int complement = -num;
-            if (freq.containsKey(complement)) {
-                // Special handling for zero: need at least two occurrences
-                if (num == 0) {
-                    if (freq.get(num) >= 2) {
-                        ArrayList<Integer> pair = new ArrayList<>();
-                        pair.add(0);
-                        pair.add(0);
-                        res.add(pair);
-                    }
+        while(i<j){
+            if(arr[i]+arr[j] > 0){
+                j--;
+            } 
+            else if(arr[i]+arr[j] < 0){
+                i++;
+            }
+            else{
+                ans.add(new ArrayList<Integer> (List.of(arr[i],arr[j])));
+                i++;
+                j--;
+                
+                while(i<j && arr[i]==arr[i-1]){
+                    i++;
                 }
-                // For non-zero numbers, add the pair only once by ensuring num < complement
-                else if (num < complement) {
-                    ArrayList<Integer> pair = new ArrayList<>();
-                    pair.add(num);
-                    pair.add(complement);
-                    res.add(pair);
+                
+                while(i<j && arr[j]==arr[j+1]){
+                    j--;
                 }
             }
         }
-        // No additional sorting on res is needed since the keys (and thus pairs) are in order.
-        return res;
+        return ans;
     }
-    
 }
-
-
